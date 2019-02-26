@@ -2,7 +2,8 @@
   "name": "jest-enhanced-resolve",
   "version": "1.0.0",
   "description": "Use Webpack's enhanced-resolve inside Jest",
-  "main": "index.js",
+  "main": "dist/jest-enhanced-resolve.js",
+  "types": "dist/jest-enhanced-resolve.d.ts",
   "scripts": {
     "build": "tsc",
     "prepublish": "npm run build"
