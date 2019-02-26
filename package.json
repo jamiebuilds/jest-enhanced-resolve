@@ -1,6 +1,6 @@
 {
   "name": "jest-enhanced-resolve",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Use Webpack's enhanced-resolve inside Jest",
   "main": "dist/jest-enhanced-resolve.js",
   "types": "dist/jest-enhanced-resolve.d.ts",
