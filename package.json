@@ -1,0 +1,39 @@
+{
+  "name": "jest-enhanced-resolve",
+  "version": "0.0.0",
+  "description": "Use Webpack's enhanced-resolve inside Jest",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "npm run build"
+  },
+  "keywords": [
+    "jest",
+    "webpack",
+    "resolver",
+    "resolve",
+    "module",
+    "mainFields",
+    "config",
+    "path",
+    "file",
+    "fs",
+    "custom"
+  ],
+  "author": "Jamie Kyle <me@thejameskyle.com>",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@types/enhanced-resolve": "^3.0.6",
+    "enhanced-resolve": "^4.1.0"
+  },
+  "peerDependencies": {
+    "jest-resolve": "^24.1.0"
+  },
+  "devDependencies": {
+    "jest-resolve": "^24.1.0",
+    "typescript": "^3.3.3333"
+  }
+}
