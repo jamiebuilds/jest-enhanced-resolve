@@ -21,7 +21,7 @@ Configure Jest to use your own `resolver.js` file:
 Configure your `resolver.js` file:
 
 ```js
-module.exports = require("jest-enhanced-resolve")({
+module.exports = require("jest-enhanced-resolve").default({
   mainFields: ["source", "module", "main"],
 })
 ```
