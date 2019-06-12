@@ -1,36 +1,50 @@
-import fs from 'fs';
-import path from 'path';
-// import resolveFrom from 'resolve-from';
-import { ResolverFactory } from 'enhanced-resolve';
-import defaultResolve from "jest-resolve/build/defaultResolver";
+import fs from "fs";
+import { ResolverFactory } from "enhanced-resolve";
 
-interface JestResolveOpts {
-  basedir: string,
-  browser: boolean,
-  extensions: Array<string>,
-  moduleDirectory: Array<string>,
-  paths: Array<string>,
-  rootDir: Array<string>,
+type CreateResolver = typeof ResolverFactory.createResolver;
+type Resolver = ReturnType<CreateResolver>;
+type ResolverOpts = Parameters<CreateResolver>[0];
+type JestResolveOpts = Parameters<
+  typeof import("jest-resolve/build/defaultResolver").default
+>[1];
+type getConfigOpts = Pick<
+  JestResolveOpts,
+  "browser" | "extensions" | "moduleDirectory"
+>;
+
+export default (module.exports = exports = create(getDefaultConfig));
+
+export function create(getConfig: (opts: getConfigOpts) => ResolverOpts) {
+  const resolverCache: { [x: string]: Resolver } = Object.create(null);
+  return (modulePath: string, jestOpts: JestResolveOpts) => {
+    const configOpts = {
+      browser: jestOpts.browser,
+      extensions: jestOpts.extensions,
+      moduleDirectory: jestOpts.moduleDirectory
+    };
+    const cacheKey = JSON.stringify(configOpts);
+    const resolver =
+      resolverCache[cacheKey] ||
+      (resolverCache[cacheKey] = ResolverFactory.createResolver({
+        ...getConfig(configOpts),
+        useSyncFileSystemCalls: true
+      }));
+
+    return resolver.resolveSync({}, jestOpts.basedir, modulePath);
+  };
 }
 
-export default function createEnhancedResolver(resolverOpts: ResolverFactory.ResolverOption) {
-  return function enhancedResolve(modulePath: string, opts: JestResolveOpts) {
-    if (modulePath.startsWith('.') || modulePath.startsWith(path.sep)) {
-      return defaultResolve(modulePath, opts);
-    }
-
-    let wpResolver = ResolverFactory.createResolver({
-      fileSystem: fs,
-      ...resolverOpts,
-      useSyncFileSystemCalls: true,
-    });
-
-    let result = wpResolver.resolveSync({}, opts.basedir, modulePath);
-
-    if (result) {
-      result = fs.realpathSync(result);
-    }
-
-    return result;
+export function getDefaultConfig(opts: getConfigOpts): ResolverOpts {
+  return {
+    symlinks: true,
+    extensions: opts.extensions,
+    modules: opts.moduleDirectory,
+    fileSystem: fs as ResolverOpts["fileSystem"],
+    ...(opts.browser
+      ? {
+          aliasFields: ["browser"],
+          mainFields: ["browser", "main"]
+        }
+      : {})
   };
-};
+}

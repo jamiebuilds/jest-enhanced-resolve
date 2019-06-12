@@ -30,9 +30,6 @@
     "@types/enhanced-resolve": "^3.0.6",
     "enhanced-resolve": "^4.1.0"
   },
-  "peerDependencies": {
-    "jest-resolve": "^24.1.0"
-  },
   "devDependencies": {
     "jest-resolve": "^24.1.0",
     "typescript": "^3.3.3333"
